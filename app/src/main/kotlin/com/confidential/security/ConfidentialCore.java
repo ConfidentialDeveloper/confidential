@@ -74,7 +74,7 @@ public class ConfidentialCore {
 //
 //    }
 //
-//    private static SmsPacket decodePacketFromSmsString(String encodedPacket) {
+//    public static SmsPacket decodePacketFromSmsString(String encodedPacket) {
 //
 //        SmsPacket toReturn = new SmsPacket(encodedPacket);
 //
