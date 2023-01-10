@@ -3,7 +3,7 @@ package com.confidential.security;
 
 public class SmsPacket {
 //
-//    private final int CHAR_MAX = 255;
+//    private final int CHAR_MAX = 256;
 //
 //    private char version;
 //    private char type;
