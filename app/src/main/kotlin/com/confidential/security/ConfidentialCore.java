@@ -81,7 +81,7 @@ public class ConfidentialCore {
 //        if (toReturn.isValid()) {
 //            return toReturn;
 //        } else {
-//            return null;
+//            throw new RuntimeException("The input packet is not valid");
 //        }
 //
 //
