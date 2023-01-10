@@ -74,7 +74,7 @@ public class ConfidentialCore {
 //
 //    }
 //
-//    public static SmsPacket decodePacketFromSmsString(String encodedPacket) {
+//    private static SmsPacket decodePacketFromSmsString(String encodedPacket) {
 //
 //        SmsPacket toReturn = new SmsPacket(encodedPacket);
 //
@@ -125,9 +125,16 @@ public class ConfidentialCore {
 //        this.packetType = null;
 //    }
 //
+//
+//
+//    public boolean addPacketString(String newPacketString)  throws NoSuchAlgorithmException, InvalidKeySpecException{
+//        SmsPacket newPacket = decodePacketFromSmsString(newPacketString);
+//        return this.addPacketToBuffer(newPacket);
+//    }
+//
 //    // Only accepts packets with the same tag as the first packet. Flush buffer using clearPacketBuffer() for new tags.
 //    // Returns true if there is a packet is ready and decoded.
-//    public boolean addPacketToBuffer(SmsPacket newPacket) throws NoSuchAlgorithmException, InvalidKeySpecException {
+//    private boolean addPacketToBuffer(SmsPacket newPacket) throws NoSuchAlgorithmException, InvalidKeySpecException {
 //        if (this.numPacketsInBuffer >= MAX_PACKETS_IN_BUFFER) {
 //            return false;
 //        } else {
