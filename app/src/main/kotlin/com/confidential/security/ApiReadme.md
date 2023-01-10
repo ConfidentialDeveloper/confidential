@@ -81,7 +81,27 @@ Each packet is constructed as follows:
 |Body|154|Content of a packet|
 |Checksum|1|Sum of all the values in the packet, modulus 256. We use this to detect if a packet is encoded by this program or not|
 
-This data structure is stored in the `SmsPacket` class. We skip the description of this class since the user does not need to access it to use the API.
+This data structure is stored in the `SmsPacket` class. We skip the description of most of the functions in class, since the user does not need to access it to use the API.
+
+### Unpack a packet
+It is possible to unpack a packet and read its different fields (as explained in the table above) by doing the following:
+```java
+String packetString = "---A received packet---";
+SmsPacket unpackedPacket = new SmsPacket (packetString);
+if (unpackedPacket.isValid())
+{
+	char version = unpackedPacket.getVersion();
+	char type = unpackedPacket.getType();  
+	PacketType type_enum = PacketType.values()[type]; // Optional
+	char tag = unpackedPacket.getTag();
+	char packetIndex = unpackedPacket.getPacketIndex();
+	char packetLength = unpackedPacket.getPacketLength();
+}
+else
+{
+	// The received packet does not have the correct structure, or is corrupted. 
+}
+```
 
 ## Encoding
 In the context of this API, Encoding is defined as turning a public key or an encrypted message into one or multiple Strings that fit into an SMS. Encoding is done via the following static functions of `ConfidentialCore` class:
@@ -108,3 +128,42 @@ String[] encodedMessage = encodeMessage(message);
 *Note: It is possible to encode a plain, unencrypted, message. However, it is not advised.*
 
 ## Decoding
+The `ConfidentialCore` class uses a buffer to gather multiple messages until enough messages are gathered and ready to be decoded. To decode a public key or an encrypted message, follow these steps:
+### Step #1: Instantiate an object from ConfidentialCore class
+```java
+ConfidentialCore cc = new ConfidentialCore();
+```
+### Step #2: Add packets in string format to the buffer
+
+```java
+boolean isReady = cc.addPacketString(msg);
+```
+Keep adding messages until this function returns true. At this time, there are enough packets in the buffer to decode.
+*Note: Never add more messages to the buffer if `addPacketString` returns true*
+### Step #3: Get the decoded Public Key or Message
+```java
+if (isReady)
+{
+	PacketType pt = cc.getDecodedPacketType();
+	if (pt == PacketType.MESSAGE)
+		String decodedMessage = cc.getDecodedMessage();
+	if (pt == PacketType.PUBLIC_KEY)
+		PublicKey decodedPublicKey = cc.getDecodedPublicKey();
+}
+else
+{
+	// Not enough packets to decode anything
+}
+
+```
+### Step #4: Clear the buffer or instantiate a new CC object before adding more packets
+```java
+if (isReady)
+{
+	// ... get decoded stuff...
+	
+	cc.clearPacketBuffer();
+	// or
+	cc = new ConfidentialCore();
+}
+```
