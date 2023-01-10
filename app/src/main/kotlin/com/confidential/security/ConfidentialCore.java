@@ -32,6 +32,10 @@ public class ConfidentialCore {
 //        return decodedMessage;
 //    }
 //
+//    public PacketType getDecodedPacketType(){
+//        return this.packetType;
+//    }
+//
 //    public ConfidentialCore() {
 //        clearPacketBuffer();
 //    }
