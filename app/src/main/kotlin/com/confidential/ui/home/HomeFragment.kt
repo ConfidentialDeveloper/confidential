@@ -1,6 +1,7 @@
 package com.confidential.ui.home
 
 import android.Manifest
+import android.os.Build
 import android.os.Bundle
 import android.telephony.SmsManager
 import android.view.LayoutInflater
@@ -16,7 +17,7 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<HomeViewModel>() {
 
-    override val viewModel : HomeViewModel by lazy {
+    override val viewModel: HomeViewModel by lazy {
         ViewModelProvider(this)[HomeViewModel::class.java]
     }
     override val screeName: String = "HomeFragment"
@@ -33,19 +34,34 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
         savedInstanceState: Bundle?
     ): View {
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-        val root: View = binding.root
+        return binding.root
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
         val textView: MaterialTextView = binding.homeTitle
         viewModel.text.observe(viewLifecycleOwner) {
             textView.text = it
         }
         binding.sendMessageBtn.setOnClickListener {
-            if(requireContext().checkPermission(Manifest.permission.SEND_SMS)){
-                val smsManager = SmsManager.getDefault()
-                smsManager.sendTextMessage(binding.cellphone.text.toString(),null,binding.message.text.toString(),null,null)
+            if (requireContext().checkPermission(Manifest.permission.SEND_SMS)) {
+                val smsManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                    requireContext().getSystemService(SmsManager::class.java)
+                } else {
+                    SmsManager.getDefault()
+                }
+                val plainText = binding.message.text.toString()
+                val cipherText = viewModel.encrypt(plainText)
+                viewModel.decrypt(cipherText)
+                smsManager.sendTextMessage(
+                    binding.cellphone.text.toString(),
+                    null,
+                    binding.message.text.toString(),
+                    null,
+                    null
+                )
             }
         }
-        return root
     }
 
     override fun onDestroyView() {

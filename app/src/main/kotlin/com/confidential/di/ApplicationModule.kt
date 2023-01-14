@@ -1,7 +1,8 @@
 package com.confidential.di
 
-import android.app.Application
 import android.content.Context
+import com.confidential.data.ConfidentialPreference
+import com.confidential.security.ConfidentialSecretManager
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -12,12 +13,8 @@ import dagger.hilt.components.SingletonComponent
 @Module
 class ApplicationModule {
 
-    @ApplicationContext
-    internal lateinit var application : Application
-
     @Provides
-    fun getContext() : Context {
-        return application.applicationContext
+    fun getSecretManager(@ApplicationContext appContext: Context): ConfidentialSecretManager {
+        return ConfidentialSecretManager(appContext, ConfidentialPreference(appContext))
     }
-
 }
