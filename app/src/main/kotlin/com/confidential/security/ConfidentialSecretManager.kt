@@ -61,41 +61,22 @@ class ConfidentialSecretManager @Inject constructor(
         keyPair = store.generateAsymmetricKey(keyProps)
         println("Saman ${getPublicKey()}")
         confidentialPreference.storeString(getPublicKey())
-
         // Encrypt/Dencrypt data using buffer with or without Initialisation Vectors
         // This additional level of safety is required on 23 API level for
         // some algorithms. Specify encryption/decryption block size to use buffer for
         // large data when using block based algorithms (such as RSA)
-
-
-//        val text : String = ""
-//        Timber.d("ConfidentialSecretManager : ecnrypted text $encryptedData")
-//        val decryptedData =
-//        Timber.d("ConfidentialSecretManager : decrypted text $decryptedData")
-
     }
 
-    fun encrypt(plainText: String = "Sample text"): String {
-        val cipherText = crypto.encrypt(plainText, keyPair.public, false)
-        println("SAMAN CipherText $cipherText")
-        return cipherText
+    fun encrypt(plainText: String): String {
+        return crypto.encrypt(plainText, keyPair.public, false)
     }
 
     fun decrypt(cipherText: String): String {
-        val plainText = crypto.decrypt(cipherText, keyPair.private, false)
-        println("SAMAN PlainText $plainText")
-        return plainText
+        return crypto.decrypt(cipherText, keyPair.private, false)
     }
 
     private fun getPublicKey(): String {
-        val key = encodeKey(keyPair.public.encoded)
-        return addHeaders(key)
-    }
-
-    private fun addHeaders(key: String): String {
-        val headline = "-----BEGIN PUBLIC KEY-----\n"
-        val footline = "-----END PUBLIC KEY-----\n"
-        return headline + key + footline
+        return encodeKey(keyPair.public.encoded)
     }
 
     private fun encodeKey(keyBytes: ByteArray) : String {

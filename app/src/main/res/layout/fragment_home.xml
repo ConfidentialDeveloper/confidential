@@ -92,4 +92,17 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/messageTIL" />
 
+    <com.google.android.material.textview.MaterialTextView
+        android:id="@+id/plainText"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="16dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/sendMessageBtn"
+        tools:text="Plain Text" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

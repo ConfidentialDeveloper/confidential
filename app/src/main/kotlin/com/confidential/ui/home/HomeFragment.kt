@@ -1,6 +1,10 @@
 package com.confidential.ui.home
 
 import android.Manifest
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+import android.content.IntentFilter
 import android.os.Build
 import android.os.Bundle
 import android.telephony.SmsManager
@@ -8,11 +12,13 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
+import androidx.localbroadcastmanager.content.LocalBroadcastManager
 import com.confidential.databinding.FragmentHomeBinding
 import com.confidential.ui.base.BaseFragment
 import com.confidential.utils.checkPermission
 import com.google.android.material.textview.MaterialTextView
 import dagger.hilt.android.AndroidEntryPoint
+
 
 @AndroidEntryPoint
 class HomeFragment : BaseFragment<HomeViewModel>() {
@@ -52,16 +58,26 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
                 }
                 val plainText = binding.message.text.toString()
                 val cipherText = viewModel.encrypt(plainText)
-                viewModel.decrypt(cipherText)
-                smsManager.sendTextMessage(
+                val dividedMessages = smsManager.divideMessage(cipherText)
+                smsManager.sendMultipartTextMessage(
                     binding.cellphone.text.toString(),
                     null,
-                    binding.message.text.toString(),
+                    dividedMessages,
                     null,
                     null
                 )
             }
         }
+
+        LocalBroadcastManager.getInstance(requireContext())
+            .registerReceiver(object : BroadcastReceiver() {
+                override fun onReceive(context: Context?, intent: Intent?) {
+                    val message = intent?.getStringExtra("message")
+                    message?.let {
+                        binding.plainText.text = viewModel.decrypt(it)
+                    }
+                }
+            }, IntentFilter("update-ui"))
     }
 
     override fun onDestroyView() {
