@@ -10,4 +10,15 @@
     <string name="menu_home">Home</string>
     <string name="menu_gallery">Gallery</string>
     <string name="menu_slideshow">Slideshow</string>
+    <string name="send_message_button_label">Send Message</string>
+    <string name="message_text_input_hint_label">Message</string>
+    <string name="phone_number_hint_label">Phone number</string>
+    <string name="send_public_key_button_label">Send Public Key</string>
+    <string name="secured_connection_established_button_label">Secured Connection Established</string>
+    <string name="home_screen_center_title">Message</string>
+    <string name="home_screen_permission_dialog_title">Permission Required</string>
+    <string name="home_screen_permission_dialog_message">Send and Receive SMS Services Permission required for this app</string>
+    <string name="permission_dialog_ok_button_label">OK</string>
+    <string name="permission_dialog_exit_the_application_button_label">Exit the application</string>
+    <string name="clear_and_resend_public_key_button_text">Clear and Resend Public Key</string>
 </resources>
