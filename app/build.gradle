@@ -17,6 +17,8 @@ android {
         versionName "1.0"
 
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
+
+        multiDexEnabled true
     }
 
     defaultConfig {
@@ -77,6 +79,8 @@ dependencies {
     kapt("androidx.room:room-compiler:$room_version")
     // Kotlin Extensions and Coroutines support for Room
     implementation "androidx.room:room-ktx:$room_version"
+    // Multidex
+    implementation 'com.android.support:multidex:1.0.3'
     //
     // Activity
     def activity_version = "1.6.1"

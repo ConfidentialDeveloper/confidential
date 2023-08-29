@@ -113,15 +113,15 @@ class HomeFragment : BaseFragment<HomeViewModel>() {
         val smsManager = if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
             requireContext().getSystemService(SmsManager::class.java)
         } else {
-            SmsManager.getDefault()
+            ContextCompat.getSystemService(requireContext(), SmsManager::class.java)
         }
         val cipherText = if (isPublicKey) {
             "$PUBLIC_KEY_SMS_TAG$message"
         } else {
             viewModel.encrypt(message)
         }
-        val dividedMessages = smsManager.divideMessage(cipherText)
-        smsManager.sendMultipartTextMessage(
+        val dividedMessages = smsManager?.divideMessage(cipherText)
+        smsManager?.sendMultipartTextMessage(
             binding.cellphone.text.toString(),
             null,
             dividedMessages,
